@@ -24,6 +24,7 @@ jobs:
     - run: yarn install --frozen-lockfile
 
   restore-in-container:
+    needs: cache
     runs-on: ubuntu-latest
     container:
       image: node:lts-slim
@@ -41,6 +42,7 @@ jobs:
         enableCrossOsArchive: true
     - run: node -e 'require ("tslib")'
   restore-on-host:
+    needs: cache
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
