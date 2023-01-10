@@ -23,7 +23,24 @@ jobs:
         enableCrossOsArchive: true
     - run: yarn install --frozen-lockfile
 
-  restore:
+  restore-in-container:
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts-slim
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          /usr/local/share/.cache/yarn/v6
+        key: node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          node_modules-${{ runner.os }}-
+          node_modules-
+        enableCrossOsArchive: true
+    - run: node -e 'require ("tslib")'
+  restore-on-host:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
