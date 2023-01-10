@@ -20,6 +20,7 @@ jobs:
         restore-keys: |
           node_modules-${{ runner.os }}-
           node_modules-
+        enableCrossOsArchive: true
     - run: yarn install --frozen-lockfile
 
   restore:
@@ -35,4 +36,5 @@ jobs:
         restore-keys: |
           node_modules-${{ runner.os }}-
           node_modules-
+        enableCrossOsArchive: true
     - run: node -e 'require ("tslib")'
