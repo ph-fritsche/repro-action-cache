@@ -30,7 +30,25 @@ jobs:
       image: node:lts-slim
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v3
+    - uses: actions/cache/restore@v3
+      with:
+        path: |
+          node_modules
+          /usr/local/share/.cache/yarn/v6
+        key: node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          node_modules-${{ runner.os }}-
+          node_modules-
+        enableCrossOsArchive: true
+    - run: node -e 'require ("tslib")'
+  restore-in-different-container:
+    needs: cache
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts-alpine
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache/restore@v3
       with:
         path: |
           node_modules
@@ -46,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v3
+    - uses: actions/cache/restore@v3
       with:
         path: |
           node_modules
