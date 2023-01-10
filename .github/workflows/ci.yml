@@ -45,7 +45,7 @@ jobs:
     needs: cache
     runs-on: ubuntu-latest
     container:
-      image: node:lts-alpine
+      image: node:lts-buster-slim
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache/restore@v3
