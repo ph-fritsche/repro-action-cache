@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts-slim
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          /usr/local/share/.cache/yarn/v6
+        key: node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          node_modules-${{ runner.os }}-
+          node_modules-
+    - run: yarn install --frozen-lockfile
+
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          /usr/local/share/.cache/yarn/v6
+        key: node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          node_modules-${{ runner.os }}-
+          node_modules-
+    - run: node -e 'require ("tslib")'
